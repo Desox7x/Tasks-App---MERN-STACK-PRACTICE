@@ -1,18 +1,24 @@
-import { pool } from "../db.js";
-
-
-
+import {
+  getAllTasks,
+  createTaskQuery,
+  getTaskQuery,
+  updateTaskQuery,
+  deleteTaskQuery,
+} from "../lib/Queries.js";
 
 export const getTasks = async (req, res) => {
-  const [result] = await pool.query("SELECT * FROM tasks ORDER BY createAt ASC");
-  console.log(result);
-  res.json(result);
+  try {
+    const [result] = await getAllTasks();
+    res.json(result);
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+    });
+  };
 };
 
 export const getTask = async (req, res) => {
-  const [result] = await pool.query("SELECT * FROM tasks WHERE id = ?", [
-    req.params.id,
-  ]);
+  const [result] = await getTaskQuery();
 
   if (result.length === 0) {
     return res.status(404).json({ message: "Task not found" });
@@ -22,20 +28,14 @@ export const getTask = async (req, res) => {
 };
 
 export const updateTask = async (req, res) => {
-  const result = await pool.query("UPDATE tasks SET ? WHERE id = ?", [
-    req.body,
-    req.params.id,
-  ]);
-
+  const result = await updateTaskQuery();
   res.json(result);
 };
 
 export const createTask = async (req, res) => {
-  const { title, description } = req.body;
-  const [result] = await pool.query(
-    "INSERT INTO tasks(title, description) VALUES (?, ?)",
-    [title, description]
-  );
+  let title = req.body.title;
+  let description = req.body.description;
+  const [result] = await createTaskQuery(title, description);
   console.log(result);
   res.json({
     id: result.insertId,
@@ -45,9 +45,7 @@ export const createTask = async (req, res) => {
 };
 
 export const deleteTask = async (req, res) => {
-  const [result] = await pool.query("DELETE FROM tasks WHERE id = ?", [
-    req.params.id,
-  ]);
+  const [result] = await deleteTaskQuery();
 
   if (result.length === 0) {
     return res.send(404).json({ message: "task not found" });
