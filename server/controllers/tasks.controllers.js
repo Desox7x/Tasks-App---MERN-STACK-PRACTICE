@@ -14,11 +14,11 @@ export const getTasks = async (req, res) => {
     return res.status(500).json({
       message: err.message,
     });
-  };
+  }
 };
 
 export const getTask = async (req, res) => {
-  const [result] = await getTaskQuery();
+  const [result] = await getTaskQuery(req.params.id);
 
   if (result.length === 0) {
     return res.status(404).json({ message: "Task not found" });
@@ -28,7 +28,11 @@ export const getTask = async (req, res) => {
 };
 
 export const updateTask = async (req, res) => {
-  const result = await updateTaskQuery();
+  const result = await updateTaskQuery(
+    req.body.title,
+    req.body.description,
+    req.params.id
+  );
   res.json(result);
 };
 
@@ -45,7 +49,7 @@ export const createTask = async (req, res) => {
 };
 
 export const deleteTask = async (req, res) => {
-  const [result] = await deleteTaskQuery();
+  const [result] = await deleteTaskQuery(req.params.id);
 
   if (result.length === 0) {
     return res.send(404).json({ message: "task not found" });
