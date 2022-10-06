@@ -29,8 +29,7 @@ export const getTask = async (req, res) => {
 
 export const updateTask = async (req, res) => {
   const result = await updateTaskQuery(
-    req.body.title,
-    req.body.description,
+    req.body,
     req.params.id
   );
   res.json(result);

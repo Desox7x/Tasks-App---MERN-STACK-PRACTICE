@@ -25,10 +25,10 @@ export const getTaskQuery = async (id) => {
 };
 
 //Update task
-export const updateTaskQuery = async (title, desc, id) => {
+export const updateTaskQuery = async (body, id) => {
   let data = await pool.query(
-    "UPDATE tasks SET title = ?, description = ? WHERE id = ?",
-    [title, desc, id]
+    "UPDATE tasks SET ? WHERE id = ?",
+    [body, id]
   );
   console.log(data);
   return data;

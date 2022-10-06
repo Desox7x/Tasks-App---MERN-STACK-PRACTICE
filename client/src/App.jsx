@@ -3,18 +3,22 @@ import { Route, Routes } from "react-router-dom";
 import TaskPage from "./pages/TaskPage.jsx";
 import TaskForm from "./pages/TaskForm.jsx";
 import NavBar from "./components/NavBar.jsx";
-import {TaskContextProvider} from './context/TaskContext'
+import { TaskContextProvider } from "./context/TaskContext";
 
 function App() {
   return (
-    <TaskContextProvider>
+    <div className="bg-white h-screen">
       <NavBar />
-      <Routes>
-        <Route path="/" element={<TaskPage />} />
-        <Route path="/new" element={<TaskForm />} />
-        <Route path="/edit/:id" element={<TaskForm />} />
-      </Routes>
-    </TaskContextProvider>
+      <div className="container mx-auto py-4 px-20">
+        <TaskContextProvider>
+          <Routes>
+            <Route path="/" element={<TaskPage />} />
+            <Route path="/new" element={<TaskForm />} />
+            <Route path="/edit/:id" element={<TaskForm />} />
+          </Routes>
+        </TaskContextProvider>
+      </div>
+    </div>
   );
 }
 
